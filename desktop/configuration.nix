@@ -101,11 +101,5 @@
 
   services.openssh.enable = true;
 
-  system.stateVersion = "23.11";
+  system.stateVersion = "23.05";
 }
-let myOverlay = import "/home/derrik/my-overlay.nix";
-{ nixpkgs.overlays = [ myOverlay ]; }
-let myOverlay = import "/home/derrik/my-overlay.nix";
-{ nixpkgs.overlays = [ myOverlay ]; }
-let myOverlay = import "/home/derrik/my-overlay.nix";
-{ nixpkgs.overlays = [ myOverlay ]; }
