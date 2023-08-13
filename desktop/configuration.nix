@@ -59,7 +59,7 @@
 
   services.xserver.enable = true;
 
-  virtualisation.virtualbox.host.enable = true;
+  #virtualisation.virtualbox.host.enable = true;
   boot.kernelParams = [ "vboxdrv.load_state=1" ];
   boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" "vboxpci" ];
   users.extraGroups.vboxusers.members = [ "derrik" ];
@@ -91,15 +91,18 @@
   };
 
   environment.systemPackages = with pkgs; [
-    bitwarden kate mesa tdesktop python311Full python311Packages.pip thunderbird spotify discord steam tailscale vmware-workstation nfs-utils papirus-icon-theme virt-manager borgbackup vorta nano gnome.gnome-tweaks home-manager wget flatpak gimp vlc quickemu qbittorrent vlc wine-staging pavucontrol winetricks flameshot element-desktop nextcloud-client git firefox-unwrapped geany
+    bitwarden kate mesa tdesktop python311Full python311Packages.pip thunderbird spotify discord steam tailscale nfs-utils papirus-icon-theme virt-manager borgbackup vorta nano gnome.gnome-tweaks home-manager wget flatpak gimp vlc quickemu qbittorrent vlc wine-staging pavucontrol winetricks flameshot element-desktop nextcloud-client git firefox-unwrapped geany gnome.gnome-disk-utility btrbk neofetch snapper obsidian unzip
   ];
 
   services.tailscale.enable = true;
   networking.firewall.checkReversePath = "loose";
 
-  virtualisation.vmware.host.enable = true;
-
+  #virtualisation.vmware.host.enable = true;
+  virtualisation.libvirtd.enable = true;
+  programs.dconf.enable = true; 
+ 
   services.openssh.enable = true;
 
+# NixOS version
   system.stateVersion = "23.05";
 }
