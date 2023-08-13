@@ -91,7 +91,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    bitwarden mesa tdesktop python311Full python311Packages.pip thunderbird spotify discord steam tailscale papirus-icon-theme borgbackup nano home-manager wget flatpak gimp vlc quickemu qbittorrent vlc wine-staging pavucontrol winetricks flameshot element-desktop nextcloud-client git firefox-unwrapped geany gnome.gnome-disk-utility neofetch obsidian unzip killall virt-manager kate microsoft-edge yt-dlp docker
+    bitwarden mesa tdesktop python311Full python311Packages.pip thunderbird spotify discord steam tailscale papirus-icon-theme borgbackup nano home-manager wget flatpak gimp vlc quickemu qbittorrent vlc wine-staging pavucontrol winetricks flameshot element-desktop nextcloud-client git firefox-unwrapped geany gnome.gnome-disk-utility neofetch obsidian unzip killall virt-manager kate microsoft-edge yt-dlp docker distrobox vim
   ];
 
   services.tailscale.enable = true;
