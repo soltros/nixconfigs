@@ -91,7 +91,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    bitwarden kate mesa tdesktop python311Full python311Packages.pip thunderbird spotify discord steam tailscale nfs-utils papirus-icon-theme virt-manager borgbackup vorta nano gnome.gnome-tweaks home-manager wget flatpak gimp vlc quickemu qbittorrent vlc wine-staging pavucontrol winetricks flameshot element-desktop nextcloud-client git firefox-unwrapped geany gnome.gnome-disk-utility btrbk neofetch snapper obsidian unzip
+    bitwarden mesa tdesktop python311Full python311Packages.pip thunderbird spotify discord steam tailscale papirus-icon-theme borgbackup nano home-manager wget flatpak gimp vlc quickemu qbittorrent vlc wine-staging pavucontrol winetricks flameshot element-desktop nextcloud-client git firefox-unwrapped geany gnome.gnome-disk-utility neofetch obsidian unzip killall virt-manager kate microsoft-edge yt-dlp
   ];
 
   services.tailscale.enable = true;
@@ -102,6 +102,8 @@
   programs.dconf.enable = true; 
  
   services.openssh.enable = true;
+  
+  hardware.bluetooth.enable = true;
 
 # NixOS version
   system.stateVersion = "23.05";
