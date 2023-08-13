@@ -87,11 +87,11 @@
 
   users.users.derrik = {
     isNormalUser = true;
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
   };
 
   environment.systemPackages = with pkgs; [
-    bitwarden mesa tdesktop python311Full python311Packages.pip thunderbird spotify discord steam tailscale papirus-icon-theme borgbackup nano home-manager wget flatpak gimp vlc quickemu qbittorrent vlc wine-staging pavucontrol winetricks flameshot element-desktop nextcloud-client git firefox-unwrapped geany gnome.gnome-disk-utility neofetch obsidian unzip killall virt-manager kate microsoft-edge yt-dlp
+    bitwarden mesa tdesktop python311Full python311Packages.pip thunderbird spotify discord steam tailscale papirus-icon-theme borgbackup nano home-manager wget flatpak gimp vlc quickemu qbittorrent vlc wine-staging pavucontrol winetricks flameshot element-desktop nextcloud-client git firefox-unwrapped geany gnome.gnome-disk-utility neofetch obsidian unzip killall virt-manager kate microsoft-edge yt-dlp docker
   ];
 
   services.tailscale.enable = true;
@@ -103,7 +103,10 @@
  
   services.openssh.enable = true;
   
+  virtualisation.docker.enable = true;
+  virtualisation.docker.storageDriver = "btrfs";
   hardware.bluetooth.enable = true;
+
 
 # NixOS version
   system.stateVersion = "23.05";
