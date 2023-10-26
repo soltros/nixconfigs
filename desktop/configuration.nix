@@ -18,6 +18,34 @@
   boot.loader.grub.useOSProber = true;
   boot.loader.grub.configurationLimit = 3;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  
+  # Plasma Flatpak icon/cursor fix
+  system.fsPackages = [ pkgs.bindfs ];
+  fileSystems =
+    let
+      mkRoSymBind = path: {
+        device = path;
+        fsType = "fuse.bindfs";
+        options = [ "ro" "resolve-symlinks" "x-gvfs-hide" ];
+      };
+      aggregated = pkgs.buildEnv {
+        name = "system-fonts-and-icons";
+        paths = with pkgs;[
+          libsForQt5.breeze-qt5
+          noto-fonts
+          noto-fonts-emoji
+          noto-fonts-cjk-sans
+          noto-fonts-cjk-serif
+        ];
+        pathsToLink = [ "/share/fonts" "/share/icons" ];
+      };
+    in
+    {
+      # Create an FHS mount to support flatpak host icons/fonts
+      "/usr/share/icons" = mkRoSymBind "${aggregated}/share/icons";
+      "/usr/share/fonts" = mkRoSymBind "${aggregated}/share/fonts";
+    };
+
 
   networking.hostName = "b450m-d3sh"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -65,9 +93,38 @@
   };
 
   # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  #services.xserver.displayManager.sddm.enable = true;
+  #services.xserver.desktopManager.plasma5.enable = true;
+  
+  # Enable the Gnome Desktop Environment.
+  services.xserver.desktopManager.gnome.enable = true;
+  services.xserver.displayManager.gdm.enable = true;  #
+  
+  # Enable the Cinnamon Desktop Environment.
+  #services.xserver.desktopManager.cinnamon.enable = true;
+  #services.xserver.displayManager.lightdm.enable = true;
+  
+  # Enable the Panthen Desktop Environment.
+  #services.xserver.desktopManager.pantheon.enable = true;
+  #services.xserver.displayManager.lightdm.enable = true;
 
+  # Enable the Deepin Desktop Environment.
+  #services.xserver.desktopManager.deepin.enable = true;
+  #services.xserver.displayManager.lightdm.enable = true;  
+
+  # Enable the XFCE4 Desktop Environment.
+  #services.xserver.desktopManager.xfce.enable = true;
+  #services.xserver.displayManager.lightdm.enable = true;
+  
+  # Enable Budgie Desktop Environment.
+  #services.xserver.desktopManager.budgie.enable = true;
+  #services.xserver.displayManager.lightdm.enable = true;
+  
+  # Enable the Mate Desktop Environment.
+  #services.xserver.desktopManager.mate.enable = true;
+  #services.xserver.displayManager.lightdm.enable = true;
+
+  
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
@@ -103,7 +160,6 @@
     description = "Derrik Diener";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-      firefox
       bitwarden
       tdesktop
       spotify
@@ -121,7 +177,6 @@
       nextcloud-client
       geany
       neofetch
-      obsidian
       kate
       thunderbird
     ];
