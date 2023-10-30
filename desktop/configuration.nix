@@ -169,11 +169,13 @@
       wget
       gimp
       vlc
+      libsForQt5.ghostwriter
       qbittorrent
       wine-staging
       pavucontrol
       winetricks
       element-desktop
+      distrobox
       nextcloud-client
       geany
       neofetch
@@ -184,7 +186,12 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  
+   
+  # Insecure packages
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-24.8.6"
+  ];
+ 
   # Flatpak support
   services.flatpak.enable = true;
   xdg.portal.enable = true;
@@ -222,9 +229,7 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    # vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default. # wget bitwarden tdesktop spotify tailscale home-manager flatpak gimp vlc qbittorrent wine-staging pavucontrol winetricks element-desktop nextcloud-client geany neofetch obsidian
-  ];
+  environment.systemPackages = with pkgs; [ ntfs3g partition-manager btrfs-progs ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
