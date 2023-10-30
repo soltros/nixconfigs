@@ -112,11 +112,15 @@ if ! shopt -oq posix; then
   fi
 fi
 
+export NIXPKGS_ALLOW_INSECURE=1
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/derrik/.local/share/flatpak/exports/share"
 alias download-distro="cd ~/scripts;bash ~/scripts/distro_downloader.sh"
-alias rsync-backup='rsync -av --progress $HOME/  derrik@debian-server:/mnt/storage/desktop/'
-alias rsync-backup-configs="rsync -av --include='.*' --exclude='*' $HOME/ derrik@debian-server:/mnt/storage/desktop/"
-alias rsync-restore="rsync -avz -e ssh derrik@debian-server:/mnt/storage/desktop/ /home/derrik/"
+alias rsync-backup-remote='rsync -av --progress $HOME/  derrik@debian-server:/mnt/storage/desktop/'
+alias rsync-backup-configs-remote="rsync -av --include='.*' --exclude='*' $HOME/ derrik@debian-server:/mnt/storage/desktop/"
+alias rsync-restore-remote="rsync -avz -e ssh derrik@debian-server:/mnt/storage/desktop/ /home/derrik/"
+alias rsync-backup='rsync -av --progress $HOME/ /mnt/storage/desktop/'
+alias rsync-backup-configs="rsync -av --include='.*' --exclude='*' $HOME/ /mnt/storage/desktop/"
+alias rsync-restore="rsync -avz /mnt/storage/desktop/ /home/derrik/"
 alias nix-update="sudo nix-channel --update && nix-env -u && sudo nixos-rebuild switch"
 alias nix-build="sudo nixos-rebuild build"
 alias nix-rollback="sudo nixos-rebuild --rollback switch"
