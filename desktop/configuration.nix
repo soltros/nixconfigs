@@ -159,29 +159,6 @@
     isNormalUser = true;
     description = "Derrik Diener";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      bitwarden
-      tdesktop
-      spotify
-      tailscale
-      home-manager
-      flatpak
-      wget
-      gimp
-      vlc
-      libsForQt5.ghostwriter
-      qbittorrent
-      wine-staging
-      pavucontrol
-      winetricks
-      element-desktop
-      distrobox
-      nextcloud-client
-      geany
-      neofetch
-      kate
-      thunderbird
-    ];
   };
 
   # Allow unfree packages
@@ -229,7 +206,9 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [ ntfs3g partition-manager btrfs-progs ];
+  environment.systemPackages = with pkgs; [
+    bitwarden tdesktop spotify tailscale home-manager flatpak wget gimp vlc libsForQt5.ghostwriter qbittorrent wine-staging pavucontrol winetricks element-desktop distrobox nextcloud-client geany neofetch kate thunderbird ntfs3g partition-manager btrfs-progs kdenlive
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
