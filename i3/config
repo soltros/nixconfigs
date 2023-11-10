@@ -53,13 +53,21 @@ bindsym $mod+Return exec i3-sensible-terminal
 # kill focused window
 bindsym $mod+Shift+q kill
 
+#Start Synapse (a program launcher)
+bindsym $mod+d exec synapse
 
 # Start rofi (a program launcher)
-bindsym $mod+d exec rofi -show run
+#bindsym $mod+d exec rofi -show run
 #bindsym $mod+d exec rofi -show run -theme ~/.config/rofi/custom.rasi
 
 # start dmenu (a program launcher)
 #bindsym $mod+d exec --no-startup-id "dmenu_run -nf '#BBBBBB' -nb '#222222' -sb '#005577' -sf '#EEEEEE' -fn 'monospace-10'"
+
+# Autostarting programs
+exec --no-startup-id flatpak run com.discordapp.Discord
+exec --no-startup-id flatpak run org.telegram.desktop
+exec --no-startup-id nextcloud
+
 # A more modern dmenu replacement is rofi:
 # bindcode $mod+40 exec "rofi -modi drun,run -show drun"
 # There also is i3-dmenu-desktop which only displays applications shipping a
@@ -155,7 +163,7 @@ bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # Lock i3
-bindsym $mod+Shift+z exec --no-startup-id i3lock
+bindsym $mod+Shift+z  exec --no-startup-id i3lock -i /usr/share/backgrounds/default.png
 
 # Lock i3 and sleep
 bindsym $mod+Shift+s exec --no-startup-id ~/scripts/lock_and_sleep.sh
