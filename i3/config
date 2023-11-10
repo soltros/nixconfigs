@@ -154,6 +154,13 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
+# Lock i3
+bindsym $mod+Shift+z exec --no-startup-id i3lock
+
+# Lock i3 and sleep
+bindsym $mod+Shift+s exec --no-startup-id ~/scripts/lock_and_sleep.sh
+
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
