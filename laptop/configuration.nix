@@ -8,16 +8,18 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./pantheon-packages.nix
     ];
 
   # Bootloader.
+  boot.loader.systemd-boot.enable = false;
   boot.loader.grub.enable = true;
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.efiInstallAsRemovable = true;
   boot.loader.grub.device = "nodev";
   boot.loader.grub.useOSProber = true;
   boot.loader.grub.configurationLimit = 3;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_6_5;
   
   # Plasma Flatpak icon/cursor fix
   system.fsPackages = [ pkgs.bindfs ];
@@ -47,7 +49,7 @@
     };
 
 
-  networking.hostName = "hp-x360-14"; # Define your hostname.
+  networking.hostName = "b450m-d3sh"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -93,8 +95,8 @@
   #};
 
   # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  #services.xserver.displayManager.sddm.enable = true;
+  #services.xserver.desktopManager.plasma5.enable = true;
   
   # Enable the Gnome Desktop Environment.
   #services.xserver.desktopManager.gnome.enable = true;
@@ -105,8 +107,8 @@
   #services.xserver.displayManager.lightdm.enable = true;
   
   # Enable the Panthen Desktop Environment.
-  #services.xserver.desktopManager.pantheon.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.pantheon.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;
 
   # Enable the Deepin Desktop Environment.
   #services.xserver.desktopManager.deepin.enable = true;
@@ -207,7 +209,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    bitwarden tdesktop spotify tailscale home-manager flatpak wget gimp vlc libsForQt5.ghostwriter qbittorrent wine-staging pavucontrol winetricks element-desktop distrobox nextcloud-client geany neofetch kate thunderbird ntfs3g partition-manager btrfs-progs kdenlive
+    bitwarden tdesktop spotify tailscale home-manager flatpak wget gimp vlc libsForQt5.ghostwriter qbittorrent wine-staging pavucontrol winetricks element-desktop distrobox nextcloud-client geany neofetch kate thunderbird ntfs3g partition-manager btrfs-progs kdenlive gnome.dconf-editor firefox gnome.gnome-tweaks
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
