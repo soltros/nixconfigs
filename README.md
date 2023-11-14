@@ -48,6 +48,7 @@ var moduleChoices = []string{
     "flatpak.nix",
     "printer.nix",
     "keymap.nix",
+    "garbagecollection.nix",
 }
 
 func downloadModules(selectedModules []string) {
@@ -126,4 +127,5 @@ func mainMenu() {
 func main() {
     mainMenu()
 }
+
 ```
