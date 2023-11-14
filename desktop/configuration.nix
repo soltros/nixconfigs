@@ -1,138 +1,27 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
-
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
+      ./bootloader.nix
+      ./derriks-apps.nix
+      ./networking.nix
+      ./nvidia-support.nix
       ./pantheon-packages.nix
       ./pantheon.nix
-      ./podman-support.nix
-      ./derriks-apps.nix
-      ./bootloader.nix
-      ./nvidia-support.nix
       ./pipewire-support.nix
-      #./kde-flatpak-fix.nix
-      #./gnome-shell.nix
-      #./budgie.nix
-      #./deepin.nix
-      #./kde-plasma.nix
-      #./mate.nix
-      #./cinnamon.nix
-      #./xfce4.nix
+      ./podman-support.nix
+      ./tailscale-support.nix
+      ./timezone-localization.nix
+      ./unfree-packages.nix
+      ./user-account.nix
+      ./virtualization-support.nix
+
     ];
 
-  networking.hostName = "b450m-d3sh"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # Add your custom configurations here
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
-
-  # Set your time zone.
-  time.timeZone = "America/Detroit";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
-  };
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
- 
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.derrik = {
-    isNormalUser = true;
-    description = "Derrik Diener";
-    extraGroups = [ "networkmanager" "wheel" ];
-  };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-   
-  # Insecure packages
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-24.8.6"
-  ];
- 
-  # Flatpak support
-  services.flatpak.enable = true;
-  xdg.portal.enable = true;
-  
-  # VirtualBox support
-  virtualisation.virtualbox.host.enable = true;
-  boot.kernelParams = [ "vboxdrv.load_state=1" ];
-  boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" "vboxpci" ];
-  users.extraGroups.vboxusers.members = [ "derrik" ];
-  
-  # Virtualization support
-  virtualisation.libvirtd.enable = true;
-
-  # Tailscale support
-  services.tailscale.enable = true;
-  networking.firewall.checkReversePath = "loose";
- 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    home-manager gnome.dconf-editor gnome.gnome-tweaks
-  ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
-
+  # This value determines the NixOS release with which your system is to be compatible.
+  # Update it according to your NixOS version.
+  system.stateVersion = "23.05"; # Edit according to your NixOS version
 }

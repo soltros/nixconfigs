@@ -10,6 +10,5 @@
   # Virtualization support
   virtualisation.libvirtd.enable = true;
 
-  };
 }
 
