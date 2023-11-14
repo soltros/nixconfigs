@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./pantheon-packages.nix
+      ./derriks-apps.nix
     ];
 
   # Bootloader.
@@ -209,7 +210,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    bitwarden tdesktop spotify tailscale home-manager flatpak wget gimp vlc libsForQt5.ghostwriter qbittorrent wine-staging pavucontrol winetricks element-desktop distrobox nextcloud-client geany neofetch kate thunderbird ntfs3g partition-manager btrfs-progs kdenlive gnome.dconf-editor firefox gnome.gnome-tweaks
+    home-manager gnome.dconf-editor gnome.gnome-tweaks
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
