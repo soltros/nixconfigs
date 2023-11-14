@@ -3,7 +3,10 @@
 {
   # Add Pantheon packages to the system environment
   environment.systemPackages = with pkgs; [
-	bitwarden
+        git
+        papirus-icon-theme
+        	
+        bitwarden
 	tdesktop
 	spotify
 	tailscale

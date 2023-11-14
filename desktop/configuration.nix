@@ -9,46 +9,21 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./pantheon-packages.nix
+      ./pantheon.nix
+      ./podman-support.nix
       ./derriks-apps.nix
+      ./bootloader.nix
+      ./nvidia-support.nix
+      ./pipewire-support.nix
+      #./kde-flatpak-fix.nix
+      #./gnome-shell.nix
+      #./budgie.nix
+      #./deepin.nix
+      #./kde-plasma.nix
+      #./mate.nix
+      #./cinnamon.nix
+      #./xfce4.nix
     ];
-
-  # Bootloader.
-  boot.loader.systemd-boot.enable = false;
-  boot.loader.grub.enable = true;
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.efiInstallAsRemovable = true;
-  boot.loader.grub.device = "nodev";
-  boot.loader.grub.useOSProber = true;
-  boot.loader.grub.configurationLimit = 3;
-  boot.kernelPackages = pkgs.linuxPackages_6_5;
-  
-  # Plasma Flatpak icon/cursor fix
-  system.fsPackages = [ pkgs.bindfs ];
-  fileSystems =
-    let
-      mkRoSymBind = path: {
-        device = path;
-        fsType = "fuse.bindfs";
-        options = [ "ro" "resolve-symlinks" "x-gvfs-hide" ];
-      };
-      aggregated = pkgs.buildEnv {
-        name = "system-fonts-and-icons";
-        paths = with pkgs;[
-          libsForQt5.breeze-qt5
-          noto-fonts
-          noto-fonts-emoji
-          noto-fonts-cjk-sans
-          noto-fonts-cjk-serif
-        ];
-        pathsToLink = [ "/share/fonts" "/share/icons" ];
-      };
-    in
-    {
-      # Create an FHS mount to support flatpak host icons/fonts
-      "/usr/share/icons" = mkRoSymBind "${aggregated}/share/icons";
-      "/usr/share/fonts" = mkRoSymBind "${aggregated}/share/fonts";
-    };
-
 
   networking.hostName = "b450m-d3sh"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -78,56 +53,6 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-   };   
-  
-  # Nvidia configuration
-  hardware.nvidia.nvidiaSettings = true;
-  
-  # Modesetting
-  hardware.nvidia = {
-    modesetting.enable = true;
-  };
-
-  # Enable the KDE Plasma Desktop Environment.
-  #services.xserver.displayManager.sddm.enable = true;
-  #services.xserver.desktopManager.plasma5.enable = true;
-  
-  # Enable the Gnome Desktop Environment.
-  #services.xserver.desktopManager.gnome.enable = true;
-  #services.xserver.displayManager.gdm.enable = true;  #
-  
-  # Enable the Cinnamon Desktop Environment.
-  #services.xserver.desktopManager.cinnamon.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;
-  
-  # Enable the Panthen Desktop Environment.
-  services.xserver.desktopManager.pantheon.enable = true;
-  services.xserver.displayManager.lightdm.enable = true;
-
-  # Enable the Deepin Desktop Environment.
-  #services.xserver.desktopManager.deepin.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;  
-
-  # Enable the XFCE4 Desktop Environment.
-  #services.xserver.desktopManager.xfce.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;
-  
-  # Enable Budgie Desktop Environment.
-  #services.xserver.desktopManager.budgie.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;
-  
-  # Enable the Mate Desktop Environment.
-  #services.xserver.desktopManager.mate.enable = true;
-  #services.xserver.displayManager.lightdm.enable = true;
-
-  
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
@@ -137,22 +62,10 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Enable sound with pipewire.
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
-  };
+ 
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -188,25 +101,7 @@
   # Tailscale support
   services.tailscale.enable = true;
   networking.firewall.checkReversePath = "loose";
-   
-  # Podman support
-  virtualisation = {
-    podman = {
-      enable = true;
-
-      # Create a `docker` alias for podman, to use it as a drop-in replacement
-      dockerCompat = true;
-
-      # Required for containers under podman-compose to be able to talk to each other.
-      defaultNetwork.settings.dns_enabled = true;
-      # For Nixos version > 22.11
-      #defaultNetwork.settings = {
-      #  dns_enabled = true;
-      #};
-    };
-  };
-  
-
+ 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
