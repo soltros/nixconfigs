@@ -49,6 +49,7 @@ var moduleChoices = []string{
     "printer.nix",
     "keymap.nix",
     "garbagecollection.nix",
+    "server.nix",
 }
 
 func downloadModules(selectedModules []string) {
@@ -127,5 +128,6 @@ func mainMenu() {
 func main() {
     mainMenu()
 }
+
 
 ```
