@@ -1,9 +1,9 @@
 { config, pkgs, ... }:
 
 {
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-  
-  
+  # Tailscale support
+  services.tailscale.enable = true;
+  networking.firewall.checkReversePath = "loose";
+
 }
 
