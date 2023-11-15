@@ -3,4 +3,4 @@
     isNormalUser = true;
     description = "Derrik Diener";
     extraGroups = [ "networkmanager" "wheel" ];
-  };
+  }
