@@ -1,4 +1,3 @@
-
 PS1='\[\e[0;1;97m\]\u\[\e[0;1m\]:\[\e[0;1;38;5;39m\]\w \[\e[0m\]'
 export NIXPKGS_ALLOW_INSECURE=1
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/derrik/.local/share/flatpak/exports/share"
@@ -14,7 +13,6 @@ alias nix-build="sudo nixos-rebuild build"
 alias nix-rollback="sudo nixos-rebuild --rollback switch"
 alias nix-generations="sudo nix-env --list-generations --profile /nix/var/nix/profiles/system"
 alias nix-gc="sudo nix-collect-garbage -d"
-alias nix-search="nix-env -qaP"
 alias nix-install="nix-env -iA"
 alias nix-uninstall="nix-env -e"
 alias nix-list="nix-env -q"
@@ -22,3 +20,11 @@ alias nix-test="sudo nixos-rebuild dry-build"
 alias edit-config="sudo nano -w /etc/nixos/configuration.nix"
 alias nix-rebuild="sudo nixos-rebuild switch"
 alias nixpkg="sudo python ~/scripts/nixpkg.py"
+alias nix-gc="sudo nix-collect-garbage -d"
+
+
+## Functions
+nixsearch() {
+    nix-env -qaP | grep "$1"
+}
+
