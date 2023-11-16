@@ -4,6 +4,10 @@
   # Add Pantheon packages to the system environment
   environment.systemPackages = with pkgs; [
 	bitwarden
+        python312
+        papirus-icon-theme
+        gnome.dconf-editor
+        gnome.gnome-tweaks
 	tdesktop
 	spotify
 	tailscale
@@ -30,7 +34,3 @@
         trayscale
   ];
 }
-
-
-
-
