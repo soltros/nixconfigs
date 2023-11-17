@@ -1,3 +1,4 @@
+
 PS1='\[\e[0;1;97m\]\u\[\e[0;1m\]:\[\e[0;1;38;5;39m\]\w \[\e[0m\]'
 export NIXPKGS_ALLOW_INSECURE=1
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/derrik/.local/share/flatpak/exports/share"
@@ -30,14 +31,25 @@ rsync_operations() {
         restore)
             rsync -avz /mnt/storage/desktop/ /home/derrik/
             ;;
+        --help)
+            echo "rsync_operations: A utility function for rsync operations."
+            echo "Usage: rsync_operations [operation]"
+            echo "Operations:"
+            echo "  backup-remote        - Backup home directory to a remote server."
+            echo "  backup-configs-remote - Backup home config files to a remote server."
+            echo "  restore-remote       - Restore home directory from a remote server."
+            echo "  backup               - Backup home directory to local storage."
+            echo "  backup-configs       - Backup home config files to local storage."
+            echo "  restore              - Restore home directory from local storage."
+            return 0
+            ;;
         *)
-            echo "Invalid operation. Please use one of the following:"
-            echo "  backup-remote, backup-configs-remote, restore-remote,"
-            echo "  backup, backup-configs, restore"
+            echo "Invalid operation. Type 'rsync_operations --help' for a list of valid operations."
             return 1
             ;;
     esac
 }
+
 
 ### NixOS operations ###
 nix_operations() {
@@ -75,11 +87,27 @@ nix_operations() {
         rebuild)
             sudo nixos-rebuild switch
             ;;
+        --help)
+            echo "nix_operations: A utility function to manage Nix operations."
+            echo "Usage: nix_operations [operation] [args...]"
+            echo "Operations:"
+            echo "  update        - Update Nix channels and the system."
+            echo "  build         - Build the system configuration."
+            echo "  rollback      - Roll back to the previous system generation."
+            echo "  generations   - List all system generations."
+            echo "  gc            - Run garbage collector to free up space."
+            echo "  env-install   - Install a package using nix-env."
+            echo "  uninstall     - Uninstall a package using nix-env."
+            echo "  list          - List installed packages."
+            echo "  test          - Perform a dry build of the system."
+            echo "  edit-config   - Edit the NixOS configuration file."
+            echo "  rebuild       - Rebuild and switch to the new system configuration."
+            return 0
+            ;;
         *)
-            echo "Invalid operation. Please use one of the following:"
-            echo "  update, build, rollback, generations, gc, env-install, uninstall,"
-            echo "  list, test, edit-config, rebuild"
+            echo "Invalid operation. Type 'nix_operations --help' for a list of valid operations."
             return 1
             ;;
     esac
 }
+
