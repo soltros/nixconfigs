@@ -1,4 +1,3 @@
-
 PS1='\[\e[0;1;97m\]\u\[\e[0;1m\]:\[\e[0;1;38;5;39m\]\w \[\e[0m\]'
 export NIXPKGS_ALLOW_INSECURE=1
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/derrik/.local/share/flatpak/exports/share"
@@ -14,19 +13,19 @@ nixsearch() {
 rsync_operations() {
     case "$1" in
         backup-remote)
-            rsync -av --progress $HOME/ derrik@debian-server:/mnt/storage/desktop/
+            rsync -avz --progress $HOME/ derrik@debian-server:/mnt/storage/desktop/
             ;;
         backup-configs-remote)
-            rsync -av --include='.*' --exclude='*' $HOME/ derrik@debian-server:/mnt/storage/desktop/
+            rsync -avz --include='.*' --exclude='*' $HOME/ derrik@debian-server:/mnt/storage/desktop/
             ;;
         restore-remote)
             rsync -avz -e ssh derrik@debian-server:/mnt/storage/desktop/ /home/derrik/
             ;;
         backup)
-            rsync -av --progress $HOME/ /mnt/storage/desktop/
+            rsync -avz --progress $HOME/ /mnt/storage/desktop/
             ;;
         backup-configs)
-            rsync -av --include='.*' --exclude='*' $HOME/ /mnt/storage/desktop/
+            rsync -avz --include='.*' --exclude='*' $HOME/ /mnt/storage/desktop/
             ;;
         restore)
             rsync -avz /mnt/storage/desktop/ /home/derrik/
@@ -111,3 +110,72 @@ nix_operations() {
     esac
 }
 
+### NixOS config backup function ###
+backup_nixos_config() {
+    local timestamp=$(date "+%Y-%m-%d_%H-%M-%S")
+    local backup_file="nixos-config-backup-$timestamp.tar.gz"
+    local destination="$HOME/Nextcloud/nixos-configs/$backup_file"
+
+    # Create a tar.gz file containing the contents of /etc/nixos/
+    tar -czf "$destination" /etc/nixos/
+
+    # Check if the backup was successful
+    if [ -f "$destination" ]; then
+        echo "Backup successful: $destination"
+        echo "Contents of the backup:"
+        tar -tzf "$destination"
+    else
+        echo "Backup failed"
+        return 1
+    fi
+}
+
+### Backup/Restore Dconf settings function ###
+dconf_backup_restore() {
+    local operation="$1"
+    local backup_dir="$HOME/Nextcloud/dconf-dumps"
+    local timestamp=$(date "+%Y-%m-%d_%H-%M-%S")
+    local backup_file="$backup_dir/dconf-settings-backup-$timestamp"
+
+    # Create backup directory if it doesn't exist
+    mkdir -p "$backup_dir"
+
+    case "$operation" in
+        backup)
+            # Backup dconf settings
+            dconf dump / > "$backup_file"
+            if [ -f "$backup_file" ]; then
+                echo "dconf settings backed up to $backup_file"
+            else
+                echo "Backup failed"
+                return 1
+            fi
+            ;;
+        restore)
+            # Restore dconf settings (latest backup file)
+            latest_backup=$(ls -t $backup_dir/dconf-settings-backup-* | head -1)
+            if [ -f "$latest_backup" ]; then
+                dconf load / < "$latest_backup"
+                echo "dconf settings restored from $latest_backup"
+            else
+                echo "No backup file found in $backup_dir"
+                return 1
+            fi
+            ;;
+
+	esac
+   }
+
+### Open with Ladder in browser function ###
+open_with_ladder() {
+    local ladder_url="http://debian-server:8282/"
+    local full_url="${ladder_url}${1}"
+
+    # Use xdg-open to open the URL in the default browser
+    xdg-open "$full_url" &> /dev/null &
+
+    echo "Opening $full_url in your default browser..."
+}
+
+### Blesh ###
+source /nix/store/c8kg9hhp6wi836wj6wdic8jpq1lc4p5j-system-path/bin/blesh-share
