@@ -1,0 +1,154 @@
+# No greeting
+set -g fish_greeting ""
+
+# Prompt Configuration
+function fish_prompt
+    set_color white; echo -n (whoami)
+    set_color normal; echo -n ':'
+    set_color cyan; echo -n (pwd)
+    set_color normal; echo -n ' '
+
+end
+
+# Environment Variables
+set -gx NIXPKGS_ALLOW_INSECURE 1
+set -gx XDG_DATA_DIRS "$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/derrik/.local/share/flatpak/exports/share"
+
+# Aliases
+alias download-distro="cd ~/scripts; and bash ~/scripts/distro_downloader.sh"
+alias nixpkg="sudo python ~/scripts/nixpkg.py"
+
+# Functions
+function dconf_backup_restore
+    set operation $argv[1]
+    set backup_dir "$HOME/Nextcloud/dconf-dumps"
+    set timestamp (date "+%Y-%m-%d_%H-%M-%S")
+    set backup_file "$backup_dir/dconf-settings-backup-$timestamp"
+
+    # Create backup directory if it doesn't exist
+    mkdir -p "$backup_dir"
+
+    switch $operation
+        case backup
+            # Backup dconf settings
+            dconf dump / > "$backup_file"
+            if test -f "$backup_file"
+                echo "dconf settings backed up to $backup_file"
+            else
+                echo "Backup failed"
+                return 1
+            end
+
+        case restore
+            # Restore dconf settings (latest backup file)
+            set latest_backup (ls -t $backup_dir/dconf-settings-backup-* | head -1)
+            if test -f "$latest_backup"
+                dconf load / < "$latest_backup"
+                echo "dconf settings restored from $latest_backup"
+            else
+                echo "No backup file found in $backup_dir"
+                return 1
+            end
+    end
+end
+
+function open_with_ladder
+    set ladder_url "http://debian-server:8282/"
+    set full_url "$ladder_url$argv[1]"
+
+    # Use xdg-open to open the URL in the default browser
+    xdg-open $full_url &> /dev/null &
+
+    echo "Opening $full_url in your default browser..."
+end
+
+
+function nix_operations
+    switch $argv[1]
+        case update
+            sudo nix-channel --update; and nix-env -u; and sudo nixos-rebuild switch
+
+        case build
+            sudo nixos-rebuild build
+
+        case rollback
+            sudo nixos-rebuild --rollback switch
+
+        case generations
+            sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
+
+        case gc
+            sudo nix-collect-garbage -d
+
+        case env-install
+            nix-env -iA $argv[2]
+
+        case uninstall
+            nix-env -e $argv[2]
+
+        case list
+            nix-env -q
+
+        case test
+            sudo nixos-rebuild dry-build
+
+        case edit-config
+            sudo nano -w /etc/nixos/configuration.nix
+
+        case rebuild
+            sudo nixos-rebuild switch
+
+        case --help
+            echo "nix_operations: A utility function to manage Nix operations."
+            echo "Usage: nix_operations [operation] [args...]"
+            echo "Operations:"
+            echo "  update        - Update Nix channels and the system."
+            echo "  build         - Build the system configuration."
+            echo "  rollback      - Roll back to the previous system generation."
+            echo "  generations   - List all system generations."
+            echo "  gc            - Run garbage collector to free up space."
+            echo "  env-install   - Install a package using nix-env."
+            echo "  uninstall     - Uninstall a package using nix-env."
+            echo "  list          - List installed packages."
+            echo "  test          - Perform a dry build of the system."
+            echo "  edit-config   - Edit the NixOS configuration file."
+            echo "  rebuild       - Rebuild and switch to the new system configuration."
+
+        case '*'
+            echo "Invalid operation. Type 'nix_operations --help' for a list of valid operations."
+            return 1
+    end
+end
+
+function nixsearch
+    nix-env -qaP | grep "$argv"
+end
+
+function search_nixpkg
+    nix search nixpkgs#$argv --extra-experimental-features nix-command --extra-experimental-features flakes
+end
+
+function rsync_operations
+    switch $argv[1]
+        case backup-remote
+            rsync -avz --progress $HOME/ derrik@debian-server:/mnt/storage/desktop/
+        case backup-configs-remote
+            rsync -avz --include='.*' --exclude='*' $HOME/ derrik@debian-server:/mnt/storage/desktop/
+        case restore-remote
+            rsync -avz -e ssh derrik@debian-server:/mnt/storage/desktop/ /home/derrik/
+        case backup
+            rsync -avz --progress $HOME/ /mnt/storage/desktop/
+        case backup-configs
+            rsync -avz --include='.*' --exclude='*' $HOME/ /mnt/storage/desktop/
+        case restore
+            rsync -avz /mnt/storage/desktop/ /home/derrik/
+        case --help
+            echo "rsync_operations: A utility function for rsync operations."
+            # ... [Rest of the help text]
+        case '*'
+            echo "Invalid operation. Type 'rsync_operations --help' for a list of valid operations."
+            return 1
+    end
+end
+
+# [The same translation process should be applied for nix_operations, backup_nixos_config, dconf_backup_restore, and open_with_ladder functions]
