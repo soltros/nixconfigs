@@ -10,4 +10,4 @@ cd chromecast-images-archive/
 
 mv *.* ~/Pictures/Wallpaper/
 
-rm ~/Pictures/chromecast-images-archive/
+rm -rf ~/Pictures/chromecast-images-archive/
