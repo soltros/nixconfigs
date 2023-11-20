@@ -19,6 +19,35 @@ alias download-distro="cd ~/scripts; and bash ~/scripts/distro_downloader.sh"
 alias nixpkg="sudo python ~/scripts/nixpkg.py"
 
 # Functions
+function mount_sshfs
+    set remote_host derrik@debian-server
+    set mount_point_laptop ~/remote_mount/laptop
+    set mount_point_desktop ~/remote_mount/desktop
+
+    switch $argv[1]
+        case laptop
+            echo "Mounting laptop storage..."
+            mkdir -p $mount_point_laptop
+            sshfs $remote_host:/mnt/storage/laptop/ $mount_point_laptop
+            echo "Laptop storage mounted at $mount_point_laptop"
+
+        case desktop
+            echo "Mounting desktop storage..."
+            mkdir -p $mount_point_desktop
+            sshfs $remote_host:/mnt/storage/desktop/ $mount_point_desktop
+            echo "Desktop storage mounted at $mount_point_desktop"
+
+        case umount
+            echo "Unmounting..."
+            fusermount -u $mount_point_laptop
+            fusermount -u $mount_point_desktop
+            echo "All mount points unmounted."
+
+        case '*'
+            echo "Usage: mount_sshfs [laptop|desktop|umount]"
+    end
+end
+
 function dconf_backup_restore
     set operation $argv[1]
     set backup_dir "$HOME/Nextcloud/dconf-dumps"
