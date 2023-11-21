@@ -21,10 +21,10 @@ alias nixpkg="sudo python ~/scripts/nixpkg.py"
 # Functions
 function update-packages
     # Update your custom Python script
-    python ~/scripts/nixpkg.py update
+    sudo python ~/scripts/nixpkg.py update
 
     # Update Flatpak
-    flatpak update -y
+    sudo flatpak update -y
 end
 
 
