@@ -19,6 +19,15 @@ alias download-distro="cd ~/scripts; and bash ~/scripts/distro_downloader.sh"
 alias nixpkg="sudo python ~/scripts/nixpkg.py"
 
 # Functions
+function update-packages
+    # Update your custom Python script
+    python ~/scripts/nixpkg.py update
+
+    # Update Flatpak
+    flatpak update -y
+end
+
+
 function mount_sshfs
     set remote_host derrik@debian-server
     set mount_point_laptop ~/remote_mount/laptop
