@@ -3,6 +3,7 @@ export NIXPKGS_ALLOW_INSECURE=1
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/derrik/.local/share/flatpak/exports/share"
 alias download-distro="cd ~/scripts;bash ~/scripts/distro_downloader.sh"
 alias nixpkg="sudo python ~/scripts/nixpkg.py"
+alias python-venv="source /home/derrik/venv/bin/activate"
 
 ## /// ///Functions/// /// ##
 nixsearch() {
@@ -177,5 +178,4 @@ open_with_ladder() {
     echo "Opening $full_url in your default browser..."
 }
 
-### Blesh ###
-source /nix/store/c8kg9hhp6wi836wj6wdic8jpq1lc4p5j-system-path/bin/blesh-share
+
