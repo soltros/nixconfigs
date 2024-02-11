@@ -1,0 +1,17 @@
+[Unit]
+Description=Mount `/home/nix` on `/nix`
+PropagatesStopTo=nix-daemon.service
+PropagatesStopTo=nix-directory.service
+After=nix-directory.service
+Requires=nix-directory.service
+ConditionPathIsDirectory=/nix
+DefaultDependencies=no
+RequiredBy=nix-daemon.service
+RequiredBy=nix-daemon.socket
+
+[Mount]
+What=/home/nix
+Where=/nix
+Type=none
+DirectoryMode=0755
+Options=bind
