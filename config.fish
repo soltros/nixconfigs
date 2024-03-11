@@ -169,11 +169,11 @@ end
 function rsync_operations
     switch $argv[1]
         case backup-remote
-            rsync -avz --progress $HOME/ derrik@debian-server:/mnt/storage/desktop/
+            rsync -avz --progress $HOME/ derrik@nixos-server:/mnt/storage-3/backups/desktop
         case backup-configs-remote
-            rsync -avz --include='.*' --exclude='*' $HOME/ derrik@debian-server:/mnt/storage/desktop/
+            rsync -avz --include='.*' --exclude='*' $HOME/ derrik@nixos-server:/mnt/storage-3/backups/desktop
         case restore-remote
-            rsync -avz -e ssh derrik@debian-server:/mnt/storage/desktop/ /home/derrik/
+            rsync -avz -e ssh derrik@nixos-server:/mnt/storage-3/backups/desktop /home/derrik/
         case backup
             rsync -avz --progress $HOME/ /mnt/storage/desktop/
         case backup-configs
