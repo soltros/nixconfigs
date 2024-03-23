@@ -120,8 +120,8 @@ func gitOperations(config Config, messageSuffix string) error {
     )
 
     if err := gitPush.Run(); err != nil {
-		    return fmt.Errorf("git push failed: %v", err)
+        return fmt.Errorf("git push failed: %v", err)
+    }
+
+    return nil
 }
-
-return nil
-
