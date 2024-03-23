@@ -1,5 +1,0 @@
-{
-    "gitRepoPath": "/path/to/your/repo",
-    "gitUsername": "yourGitUsername",
-    "gitToken": "yourPersonalAccessToken"
-}
