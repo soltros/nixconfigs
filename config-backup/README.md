@@ -75,7 +75,3 @@ The tool will scan `/etc/nixos/` for `.nix` files, copy them to your Git reposit
 ## Contributions
 
 Contributions are welcome! Please open an issue or pull request if you have suggestions or contributions to make this tool better.
-
-## License
-
-[MIT License](LICENSE) (or choose a license that suits your project)
