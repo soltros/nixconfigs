@@ -17,7 +17,7 @@ set -gx XDG_DATA_DIRS "$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/derri
 # Aliases
 alias download-distro="cd ~/scripts; and bash ~/scripts/distro_downloader.sh"
 alias nixpkg="sudo python ~/scripts/nixpkg.py"
-
+alias update="nixpkg update;flatpak update -y;sudo snap refresh"
 # Functions
 function update-packages
     # Update your custom Python script
@@ -29,7 +29,7 @@ end
 
 
 function mount_sshfs
-    set remote_host derrik@debian-server
+    set remote_host derrik@nixos-server
     set mount_point_laptop ~/remote_mount/laptop
     set mount_point_desktop ~/remote_mount/desktop
 
@@ -37,13 +37,13 @@ function mount_sshfs
         case laptop
             echo "Mounting laptop storage..."
             mkdir -p $mount_point_laptop
-            sshfs $remote_host:/mnt/storage/laptop/ $mount_point_laptop
+            sshfs $remote_host:/mnt/storage/backups/laptop/ $mount_point_laptop
             echo "Laptop storage mounted at $mount_point_laptop"
 
         case desktop
             echo "Mounting desktop storage..."
             mkdir -p $mount_point_desktop
-            sshfs $remote_host:/mnt/storage/desktop/ $mount_point_desktop
+            sshfs $remote_host:/mnt/storage-3/backups/desktop/ $mount_point_desktop
             echo "Desktop storage mounted at $mount_point_desktop"
 
         case umount
