@@ -13,6 +13,7 @@ end
 # Environment Variables
 set -gx NIXPKGS_ALLOW_INSECURE 1
 set -gx XDG_DATA_DIRS "$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/derrik/.local/share/flatpak/exports/share"
+export PATH="$PATH:/home/derrik/.local/bin"
 
 # Aliases
 alias download-distro="cd ~/scripts; and bash ~/scripts/distro_downloader.sh"
