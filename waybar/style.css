@@ -8,8 +8,9 @@
 }
 
 window#waybar {
-    background: transparent;
+    background: #000000; /* Changed from transparent to black */
     color: white;
+    border-radius: 0 0 1px 1px; /* Add a slight curve to the edges */
 }
 
 #window {
