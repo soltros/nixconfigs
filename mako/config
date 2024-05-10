@@ -10,5 +10,5 @@ default-timeout=5000
 font=Sans 10
 background-color=#1e1e1e
 text-color=#ffffff
-border-size=2
-border-color=#888888
+border-size=0
+border-color=#1e1e1e
