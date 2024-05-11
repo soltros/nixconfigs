@@ -33,6 +33,7 @@ download_file "https://raw.githubusercontent.com/soltros/nixconfigs/main/waybar/
 download_file "https://raw.githubusercontent.com/soltros/nixconfigs/main/waybar/style.css" "$CONFIG_DIR/waybar/style.css"
 download_file "https://raw.githubusercontent.com/soltros/nixconfigs/main/waybar/mediaplayer.sh" "$CONFIG_DIR/waybar/mediaplayer.sh"
 download_file "https://raw.githubusercontent.com/soltros/nixconfigs/main/mako/config" "$CONFIG_DIR/mako/config"
+download_file "https://raw.githubusercontent.com/soltros/nixconfigs/main/kitty/kitty.conf" "$CONFIG_DIR/kitty/config"
 
 # Set proper permissions for scripts
 chmod +x "$CONFIG_DIR/waybar/mediaplayer.sh"
