@@ -17,8 +17,9 @@ export PATH="$PATH:/home/derrik/.local/bin"
 
 # Aliases
 alias download-distro="cd ~/scripts; and bash ~/scripts/distro_downloader.sh"
-alias nixpkg="sudo python ~/scripts/nixpkg.py"
+alias nixpkg="sudo sh ~/scripts/nix-cleanup.sh;sudo python ~/scripts/nixpkg.py"
 alias update="nixpkg update;flatpak update -y;sudo snap refresh"
+alias edit-hypr="nano ~/.config/hypr/hyprland.conf"
 # Functions
 function update-packages
     # Update your custom Python script
@@ -110,6 +111,9 @@ function nix_operations
         case build
             sudo nixos-rebuild build
 
+       case cleanup
+           sudo sh ~/scripts/nix-cleanup.sh
+
         case rollback
             sudo nixos-rebuild --rollback switch
 
@@ -143,6 +147,7 @@ function nix_operations
             echo "Operations:"
             echo "  update        - Update Nix channels and the system."
             echo "  build         - Build the system configuration."
+            echo "  cleanup       - Commit changes to Nix git and clean repo."
             echo "  rollback      - Roll back to the previous system generation."
             echo "  generations   - List all system generations."
             echo "  gc            - Run garbage collector to free up space."
