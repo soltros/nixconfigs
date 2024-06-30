@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /etc/nixos/
+cd /home/derrik/.nixos-configs/
 
 git add *.*
 git commit -am nano
