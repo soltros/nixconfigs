@@ -15,12 +15,12 @@ export PATH="$PATH:/home/derrik/.local/bin"
 
 # Aliases
 alias download-distro="cd ~/scripts; and bash ~/scripts/distro_downloader.sh"
-alias nixpkg="sudo python ~/scripts/nixpkg.py"
+alias nixpkger="bash ~/scripts/nixpkger"
 
 # Functions
 function update-packages
     # Update your custom Python script
-    sudo python ~/scripts/nixpkg.py update
+    bash ~/scripts/nixpkger update
 end
 
 function nix_operations
