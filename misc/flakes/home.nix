@@ -63,13 +63,11 @@
       function nix_operations
         switch $argv[1]
           case update
-            sudo nix-channel --update; and nix-env -u; and sudo nixos-rebuild switch
-          case update-flake
-            cd /etc/nixos/; sudo nix flake update; sudo nixos-rebuild switch --flake .#
+            sudo nix flake update --flake /etc/nixos/flake.nix;sudo nixos-rebuild switch --flake /etc/nixos/.#
           case build
-            sudo nixos-rebuild build
+            sudo nixos-rebuild build --flake /etc/nixos/.#
           case rollback
-            sudo nixos-rebuild --rollback switch
+            sudo nixos-rebuild --rollback switch --flake /etc/nixos/.#
           case generations
             sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
           case gc
@@ -154,24 +152,6 @@
     VISUAL = "nano";
     TERMINAL = "alacritty";
     BROWSER = "firefox";
-  };
-  
-  # Set Alacritty as Nautilus default terminal
-  programs.nautilus-open-any-terminal = {
-    enable = true;
-    terminal = "alacritty";
-  };
-
-  environment = {
-    sessionVariables.NAUTILUS_4_EXTENSION_DIR = "${pkgs.gnome.nautilus-python}/lib/nautilus/extensions-4";
-    pathsToLink = [
-      "/share/nautilus-python/extensions"
-    ];
-
-    systemPackages = with pkgs; [
-      gnome.nautilus
-      gnome.nautilus-python
-    ];
   };
   
   # Alacritty terminal configuration
