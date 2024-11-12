@@ -66,7 +66,7 @@
       package = pkgs.gnome-themes-extra; # Updated to use correct top-level attribute
     };
     iconTheme = {
-      name = "Papirus Dark";
+      name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme; # Updated to use correct top-level attribute
     };
   };
