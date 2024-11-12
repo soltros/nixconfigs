@@ -34,7 +34,16 @@
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      set fish_greeting # Disable the default fish greeting
+      # No greeting
+set -g fish_greeting ""
+
+# Prompt Configuration
+function fish_prompt
+    set_color white; echo -n (whoami)
+    set_color normal; echo -n ':'
+    set_color cyan; echo -n (pwd)
+    set_color normal; echo -n ' '
+end
     '';
     shellAliases = {
       ll = "ls -l";
