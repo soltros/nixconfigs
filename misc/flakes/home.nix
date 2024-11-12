@@ -39,10 +39,10 @@
 
       # Prompt Configuration
       function fish_prompt
-          set_color white; echo -n (whoami)
-          set_color normal; echo -n ':'
-          set_color cyan; echo -n (pwd)
-          set_color normal; echo -n ' '
+        set_color white; echo -n (whoami)
+        set_color normal; echo -n ':'
+        set_color cyan; echo -n (pwd)
+        set_color normal; echo -n ' '
       end
 
       # Environment Variables
@@ -56,67 +56,68 @@
 
       # Functions
       function update-packages
-          # Update your custom Python script
-          bash ~/scripts/nixpkger update
+        # Update your custom Python script
+        bash ~/scripts/nixpkger update
       end
 
       function nix_operations
-          switch $argv[1]
-              case update
-                  sudo nix-channel --update; and nix-env -u; and sudo nixos-rebuild switch
-              case update-flake
-                  cd /etc/nixos/; sudo nix flake update; sudo nixos-rebuild switch --flake .#
-              case build
-                  sudo nixos-rebuild build
-              case rollback
-                  sudo nixos-rebuild --rollback switch
-              case generations
-                  sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
-              case gc
-                  sudo nix-collect-garbage -d
-              case env-install
-                  nix-env -iA $argv[2]
-              case uninstall
-                  nix-env -e $argv[2]
-              case list
-                  nix-env -q
-              case test
-                  sudo nixos-rebuild dry-build
-              case edit-config
-                  sudo nano -w /etc/nixos/configuration.nix
-              case rebuild
-                  sudo nixos-rebuild switch
-              case --help
-                  echo "nix_operations: A utility function to manage Nix operations."
-                  echo "Usage: nix_operations [operation] [args...]"
-                  echo "Operations:"
-                  echo "  update        - Update Nix channels and the system."
-                  echo "  update-flake  - Update Nix flake with new inputs and install new packages."
-                  echo "  build         - Build the system configuration."
-                  echo "  rollback      - Roll back to the previous system generation."
-                  echo "  generations   - List all system generations."
-                  echo "  gc            - Run garbage collector to free up space."
-                  echo "  env-install   - Install a package using nix-env."
-                  echo "  uninstall     - Uninstall a package using nix-env."
-                  echo "  list          - List installed packages."
-                  echo "  test          - Perform a dry build of the system."
-                  echo "  edit-config   - Edit the NixOS configuration file."
-                  echo "  rebuild       - Rebuild and switch to the new system configuration."
-              case '*'
-                  echo "Invalid operation. Type 'nix_operations --help' for a list of valid operations."
-                  return 1
-          end
+        switch $argv[1]
+          case update
+            sudo nix-channel --update; and nix-env -u; and sudo nixos-rebuild switch
+          case update-flake
+            cd /etc/nixos/; sudo nix flake update; sudo nixos-rebuild switch --flake .#
+          case build
+            sudo nixos-rebuild build
+          case rollback
+            sudo nixos-rebuild --rollback switch
+          case generations
+            sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
+          case gc
+            sudo nix-collect-garbage -d
+          case env-install
+            nix-env -iA $argv[2]
+          case uninstall
+            nix-env -e $argv[2]
+          case list
+            nix-env -q
+          case test
+            sudo nixos-rebuild dry-build
+          case edit-config
+            sudo nano -w /etc/nixos/configuration.nix
+          case rebuild
+            sudo nixos-rebuild switch
+          case --help
+            echo "nix_operations: A utility function to manage Nix operations."
+            echo "Usage: nix_operations [operation] [args...]"
+            echo "Operations:"
+            echo "  update        - Update Nix channels and the system."
+            echo "  update-flake  - Update Nix flake with new inputs and install new packages."
+            echo "  build         - Build the system configuration."
+            echo "  rollback      - Roll back to the previous system generation."
+            echo "  generations   - List all system generations."
+            echo "  gc            - Run garbage collector to free up space."
+            echo "  env-install   - Install a package using nix-env."
+            echo "  uninstall     - Uninstall a package using nix-env."
+            echo "  list          - List installed packages."
+            echo "  test          - Perform a dry build of the system."
+            echo "  edit-config   - Edit the NixOS configuration file."
+            echo "  rebuild       - Rebuild and switch to the new system configuration."
+          case '*'
+            echo "Invalid operation. Type 'nix_operations --help' for a list of valid operations."
+            return 1
+        end
       end
 
       function nixsearch
-          nix-env -qaP | grep "$argv"
+        nix-env -qaP | grep "$argv"
       end
 
       function search_nixpkg
-          nix search nixpkgs#$argv --extra-experimental-features nix-command --extra-experimental-features flakes
+        nix search nixpkgs#$argv --extra-experimental-features nix-command --extra-experimental-features flakes
       end
     '';
   };
+
   # XDG user directories configuration
   xdg = {
     enable = true;
@@ -154,10 +155,25 @@
     TERMINAL = "alacritty";
     BROWSER = "firefox";
   };
+  
+  # Set Alacritty as Nautilus default terminal
+  programs.nautilus-open-any-terminal = {
+    enable = true;
+    terminal = "alacritty";
+  };
 
-  # Set Alacritty as the default terminal
-  terminal = pkgs.alacritty;
+  environment = {
+    sessionVariables.NAUTILUS_4_EXTENSION_DIR = "${pkgs.gnome.nautilus-python}/lib/nautilus/extensions-4";
+    pathsToLink = [
+      "/share/nautilus-python/extensions"
+    ];
 
+    systemPackages = with pkgs; [
+      gnome.nautilus
+      gnome.nautilus-python
+    ];
+  };
+  
   # Alacritty terminal configuration
   programs.alacritty = {
     enable = true;
