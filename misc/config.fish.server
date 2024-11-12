@@ -16,6 +16,7 @@ export PATH="$PATH:/home/derrik/.local/bin"
 # Aliases
 alias download-distro="cd ~/scripts; and bash ~/scripts/distro_downloader.sh"
 alias nixpkger="bash ~/scripts/nixpkger"
+alias lsblk="lsblk -e7"
 
 # Functions
 function update-packages
@@ -27,6 +28,8 @@ function nix_operations
     switch $argv[1]
         case update
             sudo nix-channel --update; and nix-env -u; and sudo nixos-rebuild switch
+		case update-flake
+			cd /etc/nixos/;sudo nix flake update;sudo nixos-rebuild switch --flake .#
 
         case build
             sudo nixos-rebuild build
@@ -63,6 +66,7 @@ function nix_operations
             echo "Usage: nix_operations [operation] [args...]"
             echo "Operations:"
             echo "  update        - Update Nix channels and the system."
+            echo "  update-flake  - Update Nix flake with new inputs and install new packages."
             echo "  build         - Build the system configuration."
             echo "  rollback      - Roll back to the previous system generation."
             echo "  generations   - List all system generations."
