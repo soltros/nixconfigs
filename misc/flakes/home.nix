@@ -155,6 +155,9 @@
     BROWSER = "firefox";
   };
 
+  # Set Alacritty as the default terminal
+  terminal = pkgs.alacritty;
+
   # Alacritty terminal configuration
   programs.alacritty = {
     enable = true;
