@@ -52,7 +52,7 @@
           {
             system.stateVersion = "24.05";
 
-            boot.kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_zen;
+            boot.kernelPackages = pkgs.lib.mkForce unstablePkgs.linuxPackages_zen;
             hardware.nvidia.package = pkgs.lib.mkForce unstablePkgs.linuxPackages.nvidiaPackages.beta;
 
             services.xserver.videoDrivers = [ "nvidia" ];
