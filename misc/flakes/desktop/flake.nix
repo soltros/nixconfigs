@@ -17,7 +17,7 @@
     let
       system = "x86_64-linux";
 
-      # Import unstable Nixpkgs with NVIDIA and Zen kernel overlay
+      # Import unstable Nixpkgs with NVIDIA/Zen Kernel overlay and KDE Plasma 6 overlay.
       pkgs = import nixpkgs-unstable {
         inherit system;
         config = {
@@ -25,6 +25,7 @@
         };
         overlays = [
           (import ./nvidia-overlay.nix)
+          (import ./kde-plasma-6-overlay.nix)
         ];
       };
     in {
