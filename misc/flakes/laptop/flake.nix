@@ -25,7 +25,7 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in {
-      nixosConfigurations.b450m-d3sh = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.ideapad-330s = nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
           ./configuration.nix
