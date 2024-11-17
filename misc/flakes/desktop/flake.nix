@@ -25,7 +25,6 @@
         };
         overlays = [
           (import ./nvidia-overlay.nix)
-          (import ./kde-plasma-6-overlay.nix)
         ];
       };
     in {
