@@ -42,6 +42,9 @@
             system.stateVersion = "24.05";
             boot.kernelPackages = pkgs.linuxPackages;
             services.xserver.videoDrivers = [ "nvidia" ];
+            environment.systemPackages = [ 
+              nix-software-center.packages.${system}.nix-software-center 
+            ];
             nix = {
               settings = {
                 experimental-features = [ "nix-command" "flakes" ];
