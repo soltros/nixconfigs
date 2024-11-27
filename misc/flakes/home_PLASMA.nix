@@ -27,64 +27,6 @@
     };
   };
 
-  programs.plasma = {
-    enable = true;
-    workspace = {
-      theme = "Edna";
-      lookAndFeel = "org.kde.edna.desktop";
-      iconTheme = "Papirus-Dark";
-      clickItemTo = "open";
-    };
-
-    kwin = {
-      edgeBarrier = 0;
-      cornerBarrier = false;
-    };
-
-    panels = [
-      {
-        location = "bottom";
-        height = 38;
-        widgets = [
-          {
-            kickoff = {
-              sortAlphabetically = true;
-              icon = "nix-snowflake-white";
-            };
-          }
-          "org.kde.plasma.marginsseparator"
-          {
-            digitalClock = {
-              calendar.firstDayOfWeek = "sunday";
-              time.format = "12h";
-            };
-          }
-          {
-            systemTray = {
-              items = {
-                shown = [
-                  "org.kde.plasma.battery"
-                  "org.kde.plasma.bluetooth"
-                  "org.kde.plasma.networkmanagement"
-                  "org.kde.plasma.volume"
-                ];
-              };
-            };
-          }
-        ];
-      }
-    ];
-
-    configFile = {
-      kwinrc = {
-        "org.kde.kdecoration2" = {
-          theme = "Edna";
-          ButtonsOnLeft = "MNF";
-        };
-      };
-    };
-  };
-
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
