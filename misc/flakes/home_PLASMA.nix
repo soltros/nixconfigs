@@ -12,8 +12,6 @@
     btop
     ripgrep
     fd
-    libsForQt6.qt6ct
-    papirus-icon-theme
   ];
 
   programs.git = {
