@@ -12,3 +12,5 @@ background-color=#1e1e1e
 text-color=#ffffff
 border-size=0
 border-color=#1e1e1e
+# On Notify
+makoctl menu wofi -d -p 'Choose Action: '
