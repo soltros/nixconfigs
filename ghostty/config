@@ -1,0 +1,6 @@
+ font-family = DejaVu Sans Mono
+ font-size = 13.0
+ cursor-style = bar
+ adjust-cursor-thickness = 100
+ background = #1d1f21
+ background-opacity = 0.95
