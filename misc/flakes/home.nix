@@ -1,16 +1,16 @@
 { config, pkgs, ... }:
 
 {
-  home.stateVersion = "24.05";
+  home.username = "derrik";
+  home.homeDirectory = "/home/derrik";
+  home.stateVersion = "25.05";
+
   programs.home-manager.enable = true;
 
-  # Packages to install in the user profile
   home.packages = with pkgs; [
     # Development tools
-    git
-    nano
     vscode
-    
+
     # System utilities
     htop
     btop
@@ -18,7 +18,6 @@
     fd
   ];
 
-  # Git configuration
   programs.git = {
     enable = true;
     userName = "Derrik Diener";
@@ -30,7 +29,6 @@
     };
   };
 
-  # Fish shell configuration
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
@@ -56,14 +54,13 @@
 
       # Functions
       function update-packages
-        # Update your custom Python script
         bash ~/scripts/nixpkger update
       end
 
       function nix_operations
         switch $argv[1]
           case update
-            sudo nix flake update --flake /etc/nixos/flake.nix;sudo nixos-rebuild switch --flake /etc/nixos/.#
+            sudo nix flake update --flake /etc/nixos/flake.nix; sudo nixos-rebuild switch --flake /etc/nixos/.#
           case build
             sudo nixos-rebuild build --flake /etc/nixos/.#
           case rollback
@@ -116,7 +113,6 @@
     '';
   };
 
-  # XDG user directories configuration
   xdg = {
     enable = true;
     userDirs = {
@@ -130,31 +126,27 @@
     };
   };
 
-  # GTK theme configuration
   gtk = {
     enable = true;
     theme = {
       name = "Adwaita-dark";
-      package = pkgs.gnome-themes-extra; # Updated to use correct top-level attribute
+      package = pkgs.gnome-themes-extra;
     };
     iconTheme = {
       name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme; # Updated to use correct top-level attribute
+      package = pkgs.papirus-icon-theme;
     };
   };
 
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Environment variables
   home.sessionVariables = {
     EDITOR = "nano";
     VISUAL = "nano";
     TERMINAL = "alacritty";
     BROWSER = "firefox";
   };
-  
-  # Alacritty terminal configuration
+
   programs.alacritty = {
     enable = true;
     settings = {
