@@ -35,7 +35,7 @@
     ubuntu_font_family  # For waybar window title
     
     # Cursor theme
-    gnome.adwaita-icon-theme  # Includes Adwaita cursor theme
+    adwaita-icon-theme  # Includes Adwaita cursor theme
   ];
 
   programs.git = {
@@ -516,7 +516,7 @@
     gtk.enable = true;
     x11.enable = true;
     name = "Adwaita";
-    package = pkgs.gnome.adwaita-icon-theme;
+    package = pkgs.adwaita-icon-theme;
     size = 24;
   };
 
@@ -532,7 +532,7 @@
     };
     cursorTheme = {
       name = "Adwaita";
-      package = pkgs.gnome.adwaita-icon-theme;
+      package = pkgs.adwaita-icon-theme;
       size = 24;
     };
   };
