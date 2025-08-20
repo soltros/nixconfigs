@@ -21,6 +21,7 @@
     wofi                # Application launcher
     swaybg              # Wallpaper daemon
     swaylock            # Screen locker
+    swayidle            # Idle management and auto-suspend
     sway-contrib.grimshot # Screenshot tool
     nemo                # File manager
     pamixer             # Audio control
@@ -32,6 +33,9 @@
     # Fonts
     fira-code-symbols   # For waybar icons
     ubuntu_font_family  # For waybar window title
+    
+    # Cursor theme
+    gnome.adwaita-icon-theme  # Includes Adwaita cursor theme
   ];
 
   programs.git = {
@@ -64,12 +68,14 @@
       lsblk = "lsblk -e7";
     };
     
-    initExtra = ''
+    initExtraFirst = ''
       # Environment Variables
       export LANG=en_US.UTF-8
       export NIXPKGS_ALLOW_INSECURE=1
       export PATH="$PATH:/home/derrik/.local/bin"
-      
+    '';
+    
+    initExtra = ''
       # Functions
       update-packages() {
         bash ~/scripts/nixpkger update
@@ -297,6 +303,29 @@
     };
   };
 
+  # Swayidle for auto-suspend and lock management
+  services.swayidle = {
+    enable = true;
+    events = [
+      { event = "before-sleep"; command = "swaylock -i ~/Pictures/wallpaper.jpg"; }
+      { event = "lock"; command = "swaylock -i ~/Pictures/wallpaper.jpg"; }
+    ];
+    timeouts = [
+      { timeout = 300; command = "swaylock -i ~/Pictures/wallpaper.jpg"; } # Lock after 5 min
+      { timeout = 600; command = "systemctl suspend"; }                    # Suspend after 10 min
+    ];
+  };
+
+  # Create lock and suspend scripts
+  home.file.".local/bin/lock-suspend" = {
+    text = ''
+      #!/bin/sh
+      swaylock -i ~/Pictures/wallpaper.jpg &
+      sleep 1
+      systemctl suspend
+    '';
+    executable = true;
+  };
   # Create the mediaplayer script for waybar
   home.file.".config/waybar/mediaplayer.sh" = {
     text = ''
@@ -318,6 +347,7 @@
       # Environment variables (Nvidia variables removed)
       env = [
         "XCURSOR_SIZE,24"
+        "XCURSOR_THEME,Adwaita"
         "XDG_SESSION_TYPE,wayland"
         "ELECTRON_OZONE_PLATFORM_HINT,auto"
       ];
@@ -398,6 +428,7 @@
         "$mainMod, P, pseudo,"
         "$mainMod, J, togglesplit,"
         "$mainMod, L, exec, swaylock -i ~/Pictures/wallpaper.jpg"
+        "$mainMod SHIFT, L, exec, ~/.local/bin/lock-suspend"
         "$mainMod, S, exec, grimshot save screen"
         "$mainMod, F, exec, grimshot save area"
 
@@ -480,6 +511,15 @@
     };
   };
 
+  # Cursor theme configuration
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    name = "Adwaita";
+    package = pkgs.gnome.adwaita-icon-theme;
+    size = 24;
+  };
+
   gtk = {
     enable = true;
     theme = {
@@ -490,6 +530,11 @@
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
+    cursorTheme = {
+      name = "Adwaita";
+      package = pkgs.gnome.adwaita-icon-theme;
+      size = 24;
+    };
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -499,6 +544,9 @@
     VISUAL = "nano";
     TERMINAL = "alacritty";
     BROWSER = "firefox";
+    # Cursor theme environment variables
+    XCURSOR_THEME = "Adwaita";
+    XCURSOR_SIZE = "24";
   };
 
   programs.alacritty = {
