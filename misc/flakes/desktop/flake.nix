@@ -24,12 +24,32 @@
               portalPackage = hyprland.packages.${system}.xdg-desktop-portal-hyprland;
             };
             
+            # XDG Desktop Portal configuration for file dialogs
+            xdg.portal = {
+              enable = true;
+              extraPortals = [ 
+                pkgs.xdg-desktop-portal-gtk 
+              ];
+              config.common.default = "*";
+            };
+            
             # Display Manager - SDDM (recommended for Wayland)
             services.displayManager.sddm = {
               enable = true;
               wayland.enable = true;
               theme = "breeze";
             };
+            
+            # Enable suspend/sleep functionality
+            services.logind = {
+              lidSwitch = "suspend";
+              extraConfig = ''
+                HandlePowerKey=suspend
+              '';
+            };
+            
+            # Security for suspend
+            security.polkit.enable = true;
             
             # Alternative: LightDM (uncomment below and comment SDDM above)
             # services.xserver = {
