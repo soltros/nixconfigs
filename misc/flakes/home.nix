@@ -290,9 +290,9 @@
     textColor = "#ffffff";
     borderSize = 0;
     borderColor = "#1e1e1e";
-    extraConfig = ''
-      on-notify=exec makoctl menu wofi -d -p 'Choose Action: '
-    '';
+    settings = {
+      on-notify = "exec makoctl menu wofi -d -p 'Choose Action: '";
+    };
   };
 
   # Create the mediaplayer script for waybar
