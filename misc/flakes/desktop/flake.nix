@@ -2,14 +2,10 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     hyprland.url = "github:hyprwm/Hyprland";
-    home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     hardware.url = "github:nixos/nixos-hardware";
     flake-utils.url = "github:numtide/flake-utils";
   };
-  outputs = { self, nixpkgs, home-manager, hardware, flake-utils, hyprland, ... }:
+  outputs = { self, nixpkgs, hardware, flake-utils, hyprland, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -19,13 +15,6 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.users.derrik = import ./home.nix;
-          }
           {
             system.stateVersion = "25.05";
             
@@ -35,6 +24,19 @@
               package = hyprland.packages.${system}.hyprland;
               portalPackage = hyprland.packages.${system}.xdg-desktop-portal-hyprland;
             };
+            
+            # Display Manager - SDDM (recommended for Wayland)
+            services.displayManager.sddm = {
+              enable = true;
+              wayland.enable = true;
+              theme = "breeze";
+            };
+            
+            # Alternative: LightDM (uncomment below and comment SDDM above)
+            # services.xserver = {
+            #   enable = true;
+            #   displayManager.lightdm.enable = true;
+            # };
             
             nix = {
               settings = {
