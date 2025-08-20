@@ -21,14 +21,13 @@
     wofi                # Application launcher
     swaybg              # Wallpaper daemon
     swaylock            # Screen locker
-    grimshot            # Screenshot tool (part of sway-contrib)
+    sway-contrib.grimshot # Screenshot tool
     nemo                # File manager
     pamixer             # Audio control
     playerctl           # Media player control
-    nm-applet           # Network manager applet
+    networkmanagerapplet # Network manager applet
     nextcloud-client    # Nextcloud sync client
     pavucontrol         # Audio control GUI
-    hyprctl             # Hyprland control utility
     
     # Fonts
     fira-code-symbols   # For waybar icons
@@ -52,19 +51,22 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     
+    # Use oh-my-zsh
+    oh-my-zsh = {
+      enable = true;
+      theme = "terminalparty";
+      plugins = [ "git" "zsh-autosuggestions" ];
+    };
+    
     shellAliases = {
       download-distro = "cd ~/scripts && bash ~/scripts/distro_downloader.sh";
-      nixpkger = "bash ~/scripts/nixpkger";
+      nixpkger = "sh ~/scripts/nixpkger";
       lsblk = "lsblk -e7";
     };
     
     initExtra = ''
-      # Custom prompt
-      autoload -U promptinit && promptinit
-      setopt PROMPT_SUBST
-      PS1='%F{white}%n%f:%F{cyan}%~%f '
-      
       # Environment Variables
+      export LANG=en_US.UTF-8
       export NIXPKGS_ALLOW_INSECURE=1
       export PATH="$PATH:/home/derrik/.local/bin"
       
@@ -281,16 +283,16 @@
   # Mako Configuration
   services.mako = {
     enable = true;
-    anchor = "top-right";
-    margin = "10";
-    maxVisible = 5;
-    defaultTimeout = 5000;
-    font = "Sans 10";
-    backgroundColor = "#1e1e1e";
-    textColor = "#ffffff";
-    borderSize = 0;
-    borderColor = "#1e1e1e";
     settings = {
+      anchor = "top-right";
+      margin = "10";
+      max-visible = 5;
+      default-timeout = 5000;
+      font = "Sans 10";
+      background-color = "#1e1e1e";
+      text-color = "#ffffff";
+      border-size = 0;
+      border-color = "#1e1e1e";
       on-notify = "exec makoctl menu wofi -d -p 'Choose Action: '";
     };
   };
