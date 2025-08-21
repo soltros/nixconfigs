@@ -5,6 +5,7 @@
     hardware.url = "github:nixos/nixos-hardware";
     flake-utils.url = "github:numtide/flake-utils";
   };
+  
   outputs = { self, nixpkgs, hardware, flake-utils, hyprland, ... }:
     let
       system = "x86_64-linux";
@@ -27,10 +28,29 @@
             # XDG Desktop Portal configuration for file dialogs
             xdg.portal = {
               enable = true;
-              extraPortals = [ 
-                pkgs.xdg-desktop-portal-gtk 
+              extraPortals = with pkgs; [ 
+                xdg-desktop-portal-gtk
+                xdg-desktop-portal-wlr
               ];
               config.common.default = "*";
+            };
+            
+            # BPF auto-tuning for performance
+            services.bpftune.enable = true;
+            
+            # System performance optimizations
+            powerManagement.cpuFreqGovernor = "performance";
+            
+            # Btrfs optimizations
+            services.btrfs.autoScrub = {
+              enable = true;
+              interval = "monthly";
+              fileSystems = [ "/" ];
+            };
+            
+            services.fstrim = {
+              enable = true;
+              interval = "weekly";
             };
             
             # Display Manager - SDDM (recommended for Wayland)
@@ -51,6 +71,27 @@
             # Security for suspend
             security.polkit.enable = true;
             
+            # GNOME Keyring for secrets management
+            services.gnome.gnome-keyring.enable = true;
+            security.pam.services.sddm.enableGnomeKeyring = true;
+            
+            # System packages for BCC tools and utilities
+            environment.systemPackages = with pkgs; [
+              bcc
+              bpftools
+              wl-clipboard
+              cliphist
+              grim
+              slurp
+            ];
+            
+            # systemd OOM tuning for nix-daemon
+            systemd.services.nix-daemon.serviceConfig = {
+              OOMScoreAdjust = 250;
+              MemoryHigh = "8G";
+              MemoryMax = "12G";
+            };
+            
             # Alternative: LightDM (uncomment below and comment SDDM above)
             # services.xserver = {
             #   enable = true;
@@ -70,10 +111,16 @@
                 dates = "weekly";
                 options = "--delete-older-than 30d";
               };
+              # Nix store auto-optimization
+              optimise = {
+                automatic = true;
+                dates = [ "03:45" ];
+              };
             };
           }
         ];
       };
+      
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           nil
