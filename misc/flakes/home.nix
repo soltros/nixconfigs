@@ -30,6 +30,18 @@
     nextcloud-client    # Nextcloud sync client
     pavucontrol         # Audio control GUI
     
+    # Clipboard and capture tools (also added to system)
+    wl-clipboard        # Wayland clipboard utilities
+    cliphist            # Clipboard history
+    grim                # Screenshot utility
+    slurp               # Area selection for screenshots
+    
+    # Session management
+    wlogout             # Logout menu
+    
+    # Keyring and secrets
+    gnome.seahorse      # GUI for managing secrets/passwords
+    
     # Fonts
     fira-code-symbols   # For waybar icons
     ubuntu_font_family  # For waybar window title
@@ -158,9 +170,15 @@
         layer = "top";
         position = "top";
         height = 24;
-        modules-left = ["hyprland/workspaces" "sway/mode" "custom/spotify"];
+        modules-left = ["custom/launcher" "hyprland/workspaces" "sway/mode" "custom/spotify"];
         modules-center = ["sway/window"];
-        modules-right = ["pulseaudio" "battery" "tray" "clock"];
+        modules-right = ["pulseaudio" "battery" "tray" "clock" "custom/power"];
+        
+        "custom/launcher" = {
+          format = " ";
+          tooltip = false;
+          on-click = "wofi --show drun --allow-images --prompt 'Applications'";
+        };
         
         "hyprland/workspaces" = {
           disable-scroll = false;
@@ -231,6 +249,12 @@
           exec = "${config.home.homeDirectory}/.config/waybar/mediaplayer.sh";
           exec-if = "pgrep spotify";
         };
+        
+        "custom/power" = {
+          format = "⏻";
+          tooltip = false;
+          on-click = "wlogout";
+        };
       };
     };
     
@@ -275,6 +299,18 @@
       #custom-spotify {
           color: rgb(102, 220, 105);
       }
+      #custom-launcher {
+          color: #74c7ec;
+          font-size: 16px;
+          margin-left: 8px;
+          margin-right: 4px;
+      }
+      #custom-power {
+          color: #f38ba8;
+          font-size: 14px;
+          margin-left: 4px;
+          margin-right: 8px;
+      }
       #battery.warning:not(.charging) {
           color: white;
           animation-name: blink;
@@ -303,6 +339,15 @@
     };
   };
 
+  # GNOME Keyring service
+  services.gnome-keyring = {
+    enable = true;
+    components = [ "secrets" "ssh" ];
+  };
+
+  # Clipboard history service
+  services.cliphist.enable = true;
+
   # Swayidle for auto-suspend and lock management
   services.swayidle = {
     enable = true;
@@ -326,6 +371,48 @@
     '';
     executable = true;
   };
+  # Create wlogout config for power menu
+  home.file.".config/wlogout/layout" = {
+    text = ''
+      {
+          "label" : "lock",
+          "action" : "swaylock -i ~/Pictures/wallpaper.jpg",
+          "text" : "Lock",
+          "keybind" : "l"
+      }
+      {
+          "label" : "hibernate",
+          "action" : "systemctl hibernate",
+          "text" : "Hibernate",
+          "keybind" : "h"
+      }
+      {
+          "label" : "logout",
+          "action" : "hyprctl dispatch exit",
+          "text" : "Logout",
+          "keybind" : "e"
+      }
+      {
+          "label" : "shutdown",
+          "action" : "systemctl poweroff",
+          "text" : "Shutdown",
+          "keybind" : "s"
+      }
+      {
+          "label" : "suspend",
+          "action" : "systemctl suspend",
+          "text" : "Suspend",
+          "keybind" : "u"
+      }
+      {
+          "label" : "reboot",
+          "action" : "systemctl reboot",
+          "text" : "Reboot",
+          "keybind" : "r"
+      }
+    '';
+  };
+
   # Create the mediaplayer script for waybar
   home.file.".config/waybar/mediaplayer.sh" = {
     text = ''
@@ -429,8 +516,9 @@
         "$mainMod, J, togglesplit,"
         "$mainMod, L, exec, swaylock -i ~/Pictures/wallpaper.jpg"
         "$mainMod SHIFT, L, exec, ~/.local/bin/lock-suspend"
-        "$mainMod, S, exec, grimshot save screen"
-        "$mainMod, F, exec, grimshot save area"
+        "$mainMod, S, exec, grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png"
+        "$mainMod, F, exec, grim -g \"$(slurp)\" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png"
+        "$mainMod, V, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy"
 
         # Focus movement
         "$mainMod, left, movefocus, l"
@@ -494,6 +582,9 @@
         "[workspace 1 silent] mako"
         "[workspace 1 silent] nextcloud"
         "[workspace 1 silent] nm-applet"
+        "wl-paste --type text --watch cliphist store"   # Clipboard history
+        "wl-paste --type image --watch cliphist store"  # Image clipboard history
+        "gnome-keyring-daemon --start --components=secrets,ssh" # Keyring daemon
       ];
     };
   };
